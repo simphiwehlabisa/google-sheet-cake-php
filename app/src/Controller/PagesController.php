@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
@@ -43,8 +43,9 @@ class PagesController extends AppController
      *   be found and not in debug mode.
      * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
      */
-    public function display(string ...$path): ?Response
+    public function display(string...$path): ?Response
     {
+        $client = new \Google_client();
         if (!$path) {
             return $this->redirect('/');
         }
