@@ -43,9 +43,27 @@ class PagesController extends AppController
      *   be found and not in debug mode.
      * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
      */
+
+    public function getClient()
+    {
+        $client = new \Google\Client();
+        $client->setApplicationName('Google Sheets API PHP Quickstart');
+        $client->setScopes('https://www.googleapis.com/auth/spreadsheets');
+        $client->setAuthConfig('../test-google-account.json');
+        $client->setAccessType('offline');
+        return $client;
+    }
     public function display(string...$path): ?Response
     {
-        $client = new \Google_client();
+        $client = $this->getClient();
+        $service = new \Google\Service\Sheets($client);
+
+        $spreadsheetId = '1AkoxAJxSlajjLOKBTwd4e5Em9IQNjkb1mVnf-f1LXY4';
+        $range = 'A2:C';
+        $response = $service->spreadsheets_values->get($spreadsheetId, $range);
+        $values = $response->getValues();
+        $this->set('data', $values);
+
         if (!$path) {
             return $this->redirect('/');
         }
